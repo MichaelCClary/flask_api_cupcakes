@@ -1,0 +1,28 @@
+img {
+    height: 200px;
+    width: 200px
+}
+
+.tblBtn {
+    margin-left: 10%;
+}
+
+#addCupcakeDiv {
+    display: none;
+}
+
+#addCupcake {
+    margin-top: 2%;
+    margin-bottom: 2%;
+}
+
+.table{
+    text-align: center;
+}
+
+#td {
+    text-align: center;
+    display: table-cell;
+    vertical-align: middle;
+}
+

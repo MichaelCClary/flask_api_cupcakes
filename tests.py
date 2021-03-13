@@ -1,7 +1,7 @@
 from unittest import TestCase
 
 from app import app
-from models import db, Cupcake
+from models import db, Cupcake, default_url
 
 # Use test database and don't clutter tests with SQL
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///cupcakes_test'
@@ -107,3 +107,43 @@ class CupcakeViewsTestCase(TestCase):
             })
 
             self.assertEqual(Cupcake.query.count(), 2)
+
+    def test_update_cupcake(self):
+        with app.test_client() as client:
+            flavor = "SillyName3"
+            size = "sillysize3"
+            rating = 999.9
+            image = default_url
+
+            CUPCAKE_DATA_3 = {
+                "flavor": flavor,
+                "size": size,
+                "rating": rating,
+                "image": image
+            }
+
+            url = f"/api/cupcakes/{self.cupcake.id}"
+            resp = client.patch(url, json=CUPCAKE_DATA_3)
+
+            self.assertEqual(resp.status_code, 200)
+            data = resp.json
+            self.assertEqual(data, {
+                "cupcake": {
+                    "id": self.cupcake.id,
+                    "flavor": flavor,
+                    "size": size,
+                    "rating": rating,
+                    "image": image
+                }
+            })
+
+    def test_delete_cupcake(self):
+        with app.test_client() as client:
+            url = f"/api/cupcakes/{self.cupcake.id}"
+            resp = client.delete(url)
+
+            self.assertEqual(resp.status_code, 200)
+            data = resp.json
+            self.assertEqual(data, {'message': 'deleted'})
+            cupcake = Cupcake.query.get(self.cupcake.id)
+            self.assertEqual(cupcake, None)
