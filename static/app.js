@@ -39,6 +39,7 @@ async function submitCupcake() {
         image: $("#image").val(),
         rating: $("#rating").val()
     }
+    data.rating = "" ? 0 : data.rating
     const cupcake = await axios.post(`/api/cupcakes`, data);
     makeTableRow(cupcake.data.cupcake);
 
